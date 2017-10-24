@@ -1,0 +1,116 @@
+** Data reduction - remove extra neighborhoods from crimes that don't match neighborhoods in vacant_buildings
+* doesn't have to be exact address, can be near a vacant building, or also in areas near to more vacant buildings, there may be more crimes!!
+what kinds of crimes nearby?
+distance threshold of vacant points with nearby crime locations
+
+1. [ 5 pts] Load the two datasets into pandas.
+
+df = pd.read_csv('pandas_dataframe_importing_csv/example.csv')
+df
+	https://chrisalbon.com/python/pandas_dataframe_importing_csv.html
+
+----
+
+2. [10 pts] Identify the types of the attributes in the two datasets (nominal, numeric, ratio,
+intervals, etc); gather this information in a “metadata” panda.
+
+surveys_df.dtypes
+
+	http://chris.friedline.net/2015-12-15-rutgers/lessons/python2/03-data-types-and-format.html
+
+	https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.describe.html
+
+----
+
+3. [30 pts] Demonstrate basic statistical descriptions for attributes of your choice (at least
+two attributes, and at least one of each boxplot, histogram, quantile plot, boxplot,
+quantile-quantile plot, scatterplot); explain any “useful” characteristics of those attributes
+that you can draw from those statistical descriptions.
+
+plotly for python - https://plot.ly/ipython-notebooks/
+					https://plot.ly/python/#fundamentals
+
+----
+
+4. [10 pts] Use any two methods of your choice to convert non-numeric attributes of interest
+into numeric ones. (eg. one hot encoding, etc)
+
+ - 0 is identical, 1 is different
+ - differential grading (pg 349 of DMCT)
+ - sklearn one hot encoding LabelEncoder - https://hackernoon.com/what-is-one-hot-encoding-why-and-when-do-you-have-to-use-it-e3c6186d008f 
+ - https://www.kdnuggets.com/2015/12/beyond-one-hot-exploration-categorical-variables.html
+ - https://github.com/scikit-learn-contrib/categorical-encoding
+
+ - neighborhood in vacant_buildings.csv
+ - crime.csv - Description,Weapon,District,Neighborhood (weapon is of interest for missing values too)
+
+----
+
+5. [20 pts] Demonstrate two techniques for handling missing data on attributes of your
+choice.
+
+crime.csv - weapon (extrapolating based on same class or with beysian the most probable value)
+vacant_buildings - buildingAddress - ignore or manually add (only one row value missing, or prediction based on class subset )
+
+	pg 62 of DMCT
+
+-----
+
+6. [20 pts] Examine two attributes of interest for potential outliers. Show the steps in your
+examination and reasoning.
+
+weapon, location (gps coords)?? 
+
+-----
+
+7. [20 pts] Demonstrate a technique for examining the “noise” in a data attribute of your
+choice and how to “denoise” it.
+
+address unit# or lot or block range (clustering maybe)
+
+8. [20 pts] Demonstrate the creation for two new attributes from existing attributes that
+would be useful in a preliminary assessment of dependency between crimes and
+building vacancies.
+
+ - noticeDate and CrimeDate (duringVacant bool) - crime happened after notice of vacancy, so we don't incorrectly analyze
+ - just street name from both address columns - will help see potential relationship (initial direction)
+ - crime code and crime category or severity (misdemeanor, felony, etc)
+
+-----
+
+9. [20 pts] Demonstrate how to reduce numerosity (#distinct values) of an attribute of your
+choice using binning; discuss your approach and other choices.
+
+street numbers - bin to close ones either purely by street no. or by gps location (equal width of area, varying frew heights based on # of building in a fixed area),
+street numbers - bin equal frequency and see ... err.. dunno 
+
+-----
+
+10. [20 pts] Fuse/join information from the two datasets (crime and vacancies) into a new
+panda.
+
+https://pandas.pydata.org/pandas-docs/stable/merging.html
+
+-----
+
+11. [20 pts] Demonstrate data reduction using sampling techniques on subsets of attributes
+of your (demonstrate sampling with and without replacement, stratified and un-stratified;
+4 total combinations);
+
+street numbers!, gps location too - cluster into areas or just street names with freq of vacant blocks on given streets
+
+-----
+
+12. [20 pts] For two categorical attributes of your choice, demonstrate the contingency table
+and conduct a chi-squared test of independence; explain your findings.
+
+neighborhood and weapon? (like whether firearm is related to naighborhood with a lot of vacant buildings?? 
+
+-----
+
+13. [20 pts] For two numerical attributes of your choice, demonstrate the covariance matrix
+compute their correlation coefficient; explain/interpret your findings.
+
+ - Notice date and crime date
+
+ - councilDistrict and GPS coords
